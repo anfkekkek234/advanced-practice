@@ -1,0 +1,16 @@
+<!-- task_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}ایجاد تسک{% endblock %}
+
+{% block content %}
+<h2>{% if task %}ویرایش تسک{% else %}ایجاد تسک{% endif %}</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="title" class="form-label">عنوان تسک</label>
+        <input type="text" class="form-control" id="title" name="title" value="{% if task %}{{ task.title }}{% endif %}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+</form>
+{% endblock %}
