@@ -14,12 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include  
 from django.contrib.auth import views as auth_views  
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('todo_app.urls')),
-     path('login/', auth_views.LoginView.as_view(template_name='todo_app/login.html'), name='login'),  # مسیر ورود
+    path('task/', include('todo_app.urls')),  # درست است
+    path('login/', auth_views.LoginView.as_view(template_name='todo_app/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-docs/', include_docs_urls(title='API Sample'))
 ]
+
