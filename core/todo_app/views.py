@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from .models import Task
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 
 class TaskListView(ListView):
     model = Task
@@ -20,14 +21,14 @@ class TaskCreateView(LoginRequiredMixin,CreateView):
         # افزودن کاربر وارد شده به فیلد user
         form.instance.user = self.request.user
         return super().form_valid(form)
-    success_url = '/'
+    success_url = reverse_lazy('task_list')
     
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     template_name = 'todo_app/task_form.html'
     fields = ['title', 'done']
-    success_url = '/'
+    success_url = reverse_lazy('task_list')
     
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
@@ -41,5 +42,5 @@ class MarkDoneView(LoginRequiredMixin, View):
         task.save()
         
         # پس از تکمیل تسک، به صفحه لیست تسک‌ها برمی‌گردیم
-        next_url = request.GET.get('next', '/')
+        next_url = request.GET.get('next', reverse('task_list'))
         return redirect(next_url)

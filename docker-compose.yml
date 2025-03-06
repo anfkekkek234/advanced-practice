@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  backend:
+  backends:
     build: .
-    container_name: backendproject
+    container_name: backends
     command: python manage.py runserver 0.0.0.0:8002
     volumes:
       - ./core:/app
@@ -13,5 +13,17 @@ services:
       - SECRET_KEY=test
       - DEBUG=True
 
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - '5002:80'    # رابط وب SMTP4DEV
+      - '2525:25'    # تغییر پورت SMTP از 25 به 2525
+      - '1143:143'   # تغییر پورت IMAP از 143 به 1143
+    volumes:
+      - smtp4dev-data:/smtp4dev
+    environment:
+      - ServerOptions__HostName=smtp4dev
 
-
+volumes:
+  smtp4dev-data:
