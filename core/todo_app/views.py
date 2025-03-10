@@ -1,11 +1,15 @@
-from django.shortcuts import redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+    View,
+)
+
 from .models import Task
-from django.views.generic import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
 
 
 class TaskListView(ListView):

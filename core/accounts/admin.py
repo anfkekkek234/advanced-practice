@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Profile
+
+from .models import Profile, User
 
 # Register your models here.
 
@@ -21,7 +22,12 @@ class CustomUserAdmin(UserAdmin):
         (
             "permissions",
             {
-                "fields": ("is_staff", "is_active", "is_superuser", "is_verified"),
+                "fields": (
+                    "is_staff",
+                    "is_active",
+                    "is_superuser",
+                    "is_verified",
+                ),
             },
         ),
         (

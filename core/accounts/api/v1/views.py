@@ -1,37 +1,31 @@
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import (
-    RegisterationSerializer,
-    CustomAuthTokenSerializer,
-    CustomTokenObtainPairSerializer,
-    ChangePasswordSerializer,
-    ProfileSerializer,
-    ActivationResendSerializer,
-)
-from rest_framework.authtoken.views import ObtainAuthToken
+import jwt
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.mail import EmailMessage
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
+from mail_templated import EmailMessage
+from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
-from ...models import Profile
-from django.core.mail import send_mail
-from ..utils import EmailThread
-from mail_templated import EmailMessage
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework.exceptions import NotFound
 
-from rest_framework_simplejwt.tokens import RefreshToken
-import jwt
-from jwt.exceptions import InvalidSignatureError, ExpiredSignatureError
-from django.conf import settings
+from ...models import Profile
+from ..utils import EmailThread
+from .serializers import (
+    ActivationResendSerializer,
+    ChangePasswordSerializer,
+    CustomAuthTokenSerializer,
+    CustomTokenObtainPairSerializer,
+    ProfileSerializer,
+    RegisterationSerializer,
+)
 
 User = get_user_model()
 
@@ -126,7 +120,8 @@ class ChangePasswordApiView(generics.GenericAPIView):
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             return Response(
-                {"details": "password changed successfully"}, status=status.HTTP_200_OK
+                {"details": "password changed successfully"},
+                status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -184,7 +179,8 @@ class ActivationApiView(APIView):
             )
         except InvalidSignatureError:
             return Response(
-                {"details": "token is not valid"}, status=status.HTTP_400_BAD_REQUEST
+                {"details": "token is not valid"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         user_obj = User.objects.get(pk=user_id)
 

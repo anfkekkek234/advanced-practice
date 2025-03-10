@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
-from accounts.models import User, Profile
+
+from accounts.models import User
 
 
 class Task(models.Model):

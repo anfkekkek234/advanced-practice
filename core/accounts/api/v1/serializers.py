@@ -1,10 +1,11 @@
-from rest_framework import serializers
+from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
-from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from accounts.models import User, Profile
+
+from accounts.models import Profile, User
 
 
 class RegisterationSerializer(serializers.ModelSerializer):
@@ -46,7 +47,9 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 
         if email and password:
             user = authenticate(
-                request=self.context.get("request"), username=email, password=password
+                request=self.context.get("request"),
+                username=email,
+                password=password,
             )
 
             if not user:
@@ -60,7 +63,8 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 
         else:
             raise serializers.ValidationError(
-                {"detail": 'Must include "email" and "password".'}, code="authorization"
+                {"detail": 'Must include "email" and "password".'},
+                code="authorization",
             )
 
         attrs["user"] = user
@@ -101,7 +105,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("id", "email", "first_name", "last_name", "image", "description")
+        fields = (
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "image",
+            "description",
+        )
         read_only_fields = ["email"]
 
 
