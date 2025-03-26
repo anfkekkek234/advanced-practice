@@ -52,7 +52,7 @@ urlpatterns = [
         name="schema-redoc",
     ),
     path("admin/", admin.site.urls),
-    path("task/", include("todo_app.urls")),  # درست است
+        path("task/", include(("todo_app.urls", "todo_app"), namespace="todo")),  # درست است
     path(
         "login/",
         auth_views.LoginView.as_view(template_name="todo_app/login.html"),

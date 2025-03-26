@@ -14,14 +14,14 @@
                 {% if not task.done %}
                     {% if user.is_authenticated %}
                         <div class="d-inline-block">
-                            <form method="post" action="{% url 'mark_done' task.id %}">
+                            <form method="post" action="{% url 'todo_app:mark_done' task.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-success">تکمیل شده</button>
                             </form>
                         </div>
                     {% else %}
                         <div class="d-inline-block">
-                            <a href="{% url 'login' %}?next={% url 'task_list' %}" class="btn btn-sm btn-success">تکمیل شده</a>
+                            <a href="{% url 'login' %}?next={% url 'todo_app:task_list' %}" class="btn btn-sm btn-success">تکمیل شده</a>
                         </div>
                     {% endif %}
                 {% else %}
@@ -30,13 +30,13 @@
                 
                 {% if user.is_authenticated %}
                     <div class="d-inline-block">
-                        <a href="{% url 'task_edit' task.id %}" class="btn btn-sm btn-warning">ویرایش</a>
-                        <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-danger">حذف</a>
+                        <a href="{% url 'todo_app:task_edit' task.id %}" class="btn btn-sm btn-warning">ویرایش</a>
+                        <a href="{% url 'todo_app:task_delete' task.id %}" class="btn btn-sm btn-danger">حذف</a>
                     </div>
                 {% else %}
                     <div class="d-inline-block">
-                        <a href="{% url 'login' %}?next={% url 'task_list' %}" class="btn btn-sm btn-warning">ویرایش</a>
-                        <a href="{% url 'login' %}?next={% url 'task_list' %}" class="btn btn-sm btn-danger">حذف</a>
+                        <a href="{% url 'login' %}?next={% url 'todo_app:task_list' %}" class="btn btn-sm btn-warning">ویرایش</a>
+                        <a href="{% url 'login' %}?next={% url 'todo_app:task_list' %}" class="btn btn-sm btn-danger">حذف</a>
                     </div>
                 {% endif %}
             </li>
@@ -47,8 +47,8 @@
 {% endif %}
 <!-- اگر کاربر لاگین نکرده باشد، لینک ایجاد تسک جدید به صفحه لاگین هدایت می‌شود -->
 {% if user.is_authenticated %}
-    <a href="{% url 'task_create' %}" class="btn btn-primary mt-3">ایجاد تسک جدید</a>
+    <a href="{% url 'todo_app:task_create' %}" class="btn btn-primary mt-3">ایجاد تسک جدید</a>
 {% else %}
-    <a href="{% url 'login' %}?next={% url 'task_create' %}" class="btn btn-primary mt-3">ایجاد تسک جدید</a>
+    <a href="{% url 'login' %}?next={% url 'todo_app:task_create' %}" class="btn btn-primary mt-3">ایجاد تسک جدید</a>
 {% endif %}
 {% endblock %}
